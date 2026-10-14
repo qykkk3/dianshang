@@ -1,0 +1,119 @@
+server:
+  port: 8080
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+
+spring:
+  application:
+    name: mall-backend
+  # ---------------------------------------------------------------- 数据源
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # 支持通过环境变量覆盖，便于 Docker 部署
+    url: jdbc:mysql://${MYSQL_HOST:127.0.0.1}:${MYSQL_PORT:3306}/${MYSQL_DATABASE:mall_db}?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true
+    username: ${MYSQL_USERNAME:root}
+    password: ${MYSQL_PASSWORD:123456}
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      pool-name: MallHikariPool
+  # ---------------------------------------------------------------- Redis
+  data:
+    redis:
+      host: ${REDIS_HOST:127.0.0.1}
+      port: ${REDIS_PORT:6379}
+      database: ${REDIS_DATABASE:0}
+      password: ${REDIS_PASSWORD:}
+      timeout: 5000ms
+      lettuce:
+        pool:
+          max-active: 16
+          max-idle: 8
+          min-idle: 2
+          max-wait: 3000ms
+  # ---------------------------------------------------------------- 文件上传
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 50MB
+  # ---------------------------------------------------------------- 静态资源(本地磁盘图片)
+  web:
+    resources:
+      static-locations: classpath:/static/
+  mvc:
+    throw-exception-if-no-handler-found: false
+
+# ---------------------------------------------------------------- MyBatis-Plus
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  type-aliases-package: com.mall.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+  global-config:
+    banner: false
+    db-config:
+      id-type: auto
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+      table-underline: true
+
+# ---------------------------------------------------------------- 接口文档
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  default-flat-param-object: true
+
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
+    swagger-model-name: 数据模型
+  basic:
+    enable: false
+
+# ---------------------------------------------------------------- 业务配置
+mall:
+  jwt:
+    # 生产环境请务必替换为自己的密钥（长度需 >= 32 字节）
+    secret: mall-ecommerce-system-jwt-secret-key-2026-10-13-keep-it-safe-0x9F
+    # Token 有效期(秒)，默认 7 天
+    expire: 604800
+    header: Authorization
+    prefix: "Bearer "
+  upload:
+    # 图片本地磁盘存储目录（相对启动目录；也可用绝对路径，Docker 中通过环境变量覆盖）
+    path: ${UPLOAD_PATH:./uploads}
+    # 静态资源访问前缀
+    url-prefix: /api/files
+    # 允许的图片后缀
+    allow-ext: jpg,jpeg,png,gif,bmp,webp,svg
+  shop:
+    # 默认运费
+    freight-fee: 10.00
+    # 包邮门槛
+    free-freight-amount: 99.00
+    # 库存预警默认阈值
+    stock-warn-threshold: 10
+    # 未支付订单自动取消(分钟)
+    order-auto-cancel-minutes: 30
+
+logging:
+  level:
+    root: info
+    com.mall: info
+    com.mall.mapper: debug
+    org.springframework.security: warn
+  pattern:
+    console: "%d{HH:mm:ss.SSS} %-5level [%thread] %logger{28} - %msg%n"

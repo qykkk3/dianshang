@@ -1,0 +1,128 @@
+/* ==========================================================================
+   全局样式：电商管理系统
+   ========================================================================== */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
+  font-size: 14px;
+  color: #303133;
+  background-color: #f5f7fa;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul,
+ol,
+li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* 页面容器 ---------------------------------------------------------------- */
+.page-container {
+  width: 1200px;
+  margin: 0 auto;
+}
+
+.page-card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.mt-8 { margin-top: 8px; }
+.mt-12 { margin-top: 12px; }
+.mt-16 { margin-top: 16px; }
+.mt-20 { margin-top: 20px; }
+.mb-12 { margin-bottom: 12px; }
+.mb-16 { margin-bottom: 16px; }
+.mb-20 { margin-bottom: 20px; }
+.text-muted { color: #909399; }
+.text-danger { color: #f56c6c; }
+.text-success { color: #67c23a; }
+.text-price { color: #ff5000; font-weight: 600; }
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.text-ellipsis-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* 通用 flex --------------------------------------------------------------- */
+.flex { display: flex; }
+.flex-between { display: flex; align-items: center; justify-content: space-between; }
+.flex-center { display: flex; align-items: center; justify-content: center; }
+.flex-1 { flex: 1; }
+.gap-8 { gap: 8px; }
+.gap-12 { gap: 12px; }
+.gap-16 { gap: 16px; }
+
+/* 查询表单条 -------------------------------------------------------------- */
+.search-bar {
+  background: #fff;
+  padding: 18px 20px 2px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+/* 表格操作列 -------------------------------------------------------------- */
+.table-actions .el-button + .el-button {
+  margin-left: 6px;
+}
+
+/* 滚动条美化 -------------------------------------------------------------- */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c0c4cc;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* 后台页面标题 ------------------------------------------------------------ */
+.admin-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.admin-page-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #303133;
+}
+
+/* 空状态 ------------------------------------------------------------------ */
+.empty-block {
+  padding: 40px 0;
+  text-align: center;
+  color: #909399;
+}

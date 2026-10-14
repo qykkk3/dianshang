@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#78350f"/>
+      <stop offset="100%" stop-color="#fbbf24"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="420" fill="url(#g)"/>
+  <circle cx="1050" cy="90" r="200" fill="#ffffff" opacity="0.10"/>
+  <circle cx="180" cy="360" r="160" fill="#ffffff" opacity="0.08"/>
+  <text x="80" y="200" font-family="Microsoft YaHei,SimHei,sans-serif" font-size="64" fill="#ffffff" font-weight="bold">零食囤货节 满50减10</text>
+  <text x="80" y="270" font-family="Microsoft YaHei,SimHei,sans-serif" font-size="30" fill="#ffffff" opacity="0.9">每日坚果 · 冻干水果 · 精品咖啡</text>
+</svg>

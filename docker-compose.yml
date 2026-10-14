@@ -1,0 +1,114 @@
+# =============================================================================
+#  电商管理系统 一键部署编排
+#    mysql    : MySQL 8.0（首次启动自动执行 sql/01-schema.sql 与 sql/02-data.sql）
+#    redis    : Redis 7（登录态、缓存）
+#    backend  : Spring Boot 3.3 后端
+#    frontend : Vue3 构建产物 + Nginx（反向代理 /api 到 backend）
+#
+#  使用：
+#    docker compose up -d --build
+#    前台商城      http://localhost:8081
+#    管理后台      http://localhost:8081/admin/login   (admin / 123456)
+#    接口文档      http://localhost:8080/doc.html
+#
+#  注意：本文件在交付环境中未实测（本机未安装 Docker），首次启动请留意日志。
+# =============================================================================
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mall-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: mall_db
+      TZ: Asia/Shanghai
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_general_ci
+      - --default-time-zone=+08:00
+    ports:
+      # 宿主机 3307，避免与本机已有的 MySQL(3306) 冲突
+      - "3307:3306"
+    volumes:
+      - mall-mysql-data:/var/lib/mysql
+      # 初始化脚本：容器首次启动时按文件名顺序执行
+      - ./sql:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-p123456"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 40s
+    networks:
+      - mall-net
+
+  redis:
+    image: redis:7-alpine
+    container_name: mall-redis
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      # 宿主机 6380，避免与本机已有的 Redis(6379) 冲突
+      - "6380:6379"
+    volumes:
+      - mall-redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - mall-net
+
+  backend:
+    build:
+      context: ./backend
+    image: mall-backend:1.0.0
+    container_name: mall-backend
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: mall_db
+      MYSQL_USERNAME: root
+      MYSQL_PASSWORD: 123456
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_DATABASE: 0
+      UPLOAD_PATH: /app/uploads
+      TZ: Asia/Shanghai
+    ports:
+      - "8080:8080"
+    volumes:
+      # 上传的图片持久化到宿主机
+      - mall-uploads:/app/uploads
+    networks:
+      - mall-net
+
+  frontend:
+    build:
+      context: ./frontend
+    image: mall-frontend:1.0.0
+    container_name: mall-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "8081:80"
+    networks:
+      - mall-net
+
+volumes:
+  mall-mysql-data:
+  mall-redis-data:
+  mall-uploads:
+
+networks:
+  mall-net:
+    driver: bridge

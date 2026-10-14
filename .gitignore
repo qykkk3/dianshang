@@ -1,0 +1,45 @@
+# ---------------- Java / Maven ----------------
+backend/target/
+!.mvn/wrapper/maven-wrapper.jar
+.m2-repo/
+*.class
+*.jar
+!.mvn/wrapper/*.jar
+
+# ---------------- 上传的图片 ----------------
+# 演示占位图（backend/uploads/{product,banner,avatar}/*.svg）随仓库提供，保证 clone 后图片可正常显示
+# 运行时通过后台上传的图片存放在 {type}/yyyyMM/ 下，不纳入版本管理
+backend/uploads/**/[0-9][0-9][0-9][0-9][0-9][0-9]/
+
+# ---------------- Node / Vite ----------------
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+.npm-cache/
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ---------------- IDE ----------------
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+.DS_Store
+
+# ---------------- 日志与临时文件 ----------------
+logs/
+*.log
+.tmp/
+tools/pwd_hash.txt
+
+# ---------------- 与本项目无关的本地环境文件（不纳入版本管理） ----------------
+# Docker 安装包与安装脚本（约 959MB，含 DockerDesktopInstaller.exe / wsl.msi）
+docker-installer/
+# 本机环境修复脚本与手册
+fix-mysql-security.*
+开发环境修复手册.md
+# 临时探测脚本
+frontend/_probe.mjs
+**/_probe.mjs

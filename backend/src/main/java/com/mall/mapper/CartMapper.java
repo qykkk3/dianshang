@@ -1,0 +1,10 @@
+package com.mall.mapper;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.mall.entity.Cart;
+import org.apache.ibatis.annotations.Mapper;
+
+/** Cart Mapper */
+@Mapper
+public interface CartMapper extends BaseMapper<Cart> {
+}
